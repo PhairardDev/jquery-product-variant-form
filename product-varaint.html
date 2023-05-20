@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test PrimoMall Product varaints</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="css/bootstrap-tagsinput.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-10 offset-md-1 mt-4">
+                <h2>Product variation</h2>
+                <form id="option-form">
+                    <div class="variation">
+                        <div class="attrbute-row p-4 mb-3 bg-light position-relative">
+                            <div class="position-absolute top-0 end-0 mt-2 mr-2">
+                                <a class="btn btn-outline btn-remove-attrbute-row">Remove</a>
+                            </div>
+                            <div class="mb-3">
+                                <label for="option-name[]" class="form-label">Option name</label>
+                                <input type="text" class="form-control" name="option-name[]" id="option-name[]" placeholder="eg. Color, Size" value="" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="option-value[]" class="form-label">Option Value</label>
+                              <input type="text" name="option-value[]" id="option-value[]" value="" data-role="tagsinput" placeholder="Add option value" onchange="generateVariantInputFields()">
+                            </div>
+                        </div>
+                        <!-- <div class="attrbute-row p-4 mb-3 bg-light position-relative">
+                            <div class="position-absolute top-0 end-0 mt-2 mr-2">
+                                <a class="btn btn-outline btn-remove-attrbute-row">Remove</a>
+                            </div>
+                            <div class="mb-3">
+                                <label for="option-name-2" class="form-label">Option name</label>
+                                <input type="text" class="form-control" name="option-name-2" id="option-name-2" placeholder="eg. Color, Size" value="" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="option-value-2" class="form-label">Option Value</label>
+                              <input type="text" name="option-value-2" id="option-value-2" value="" data-role="tagsinput" placeholder="Add option value" onchange="generateVariantInputFields()" >
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-outline-secondary btn-block w-100 btn-add-attribute-row">+ Add new</button>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="button" id="add-attribute" class="btn btn-success" onclick="getInputValues()">Save Attribute</button>
+                    </div>
+
+                </form>
+
+
+                <table id="variant-table" class="mt-4 table table-bordered variation-table table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Variant</th>
+                            <th scope="col">image</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Stock Quantity</th>
+                            <th scope="col">SKU</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+      <!-- HTML form to select attributes -->
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="js/bootstrap-tagsinput.min.js"></script>
+  
+
+<script>
+
+    $(document).ready(function() {
+
+      $(this).find('input[data-role=tagsinput]').tagsinput();
+
+      $('#option-form').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) { 
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      let attributeRowCount = 0;
+      $('.btn-add-attribute-row').click(function() {
+
+        if(attributeRowCount<1){
+
+          // clone element from classname attriute-row and clear the value
+          $( ".attrbute-row" ).clone().appendTo( ".variation" ).find("input").val("");
+          // $('.variation').append(`<div class="attrbute-row p-4 mb-3 bg-light position-relative">
+          //                       <div class="position-absolute top-0 end-0 mt-2 mr-2">
+          //                           <a class="btn btn-outline btn-remove-attrbute-row te">Remove</a>
+          //                       </div>
+          //                       <div class="mb-3">
+          //                           <label for="option-name-2" class="form-label">Option name</label>
+          //                           <input type="text" class="form-control" name="option-name-2" id="option-name-2" placeholder="eg. Color, Size" value="" required>
+          //                       </div>
+          //                       <div class="mb-3">
+          //                         <label for="option-value-2" class="form-label">Option Value</label>
+          //                         <input type="text" name="option-value-2" id="option-value-2" value="" data-role="tagsinput" placeholder="Add option value" onchange="generateVariantInputFields()" >
+          //                       </div>
+          //                   </div>`)
+          attributeRowCount++;
+          $('.btn-add-attribute-row').prop('disabled', true);
+          
+        }
+
+        //console.log(attributeRowCount);
+
+        $('.btn-remove-attrbute-row').click(function() {
+            attributeRowCount=0
+            $(this).closest('.attrbute-row').remove();
+            $('.btn-add-attribute-row').prop('disabled', false);
+            //$('.btn-remove-attrbute-row').prop('disabled', true);
+        });
+
+        
+      });
+      
+      
+
+    });
+
+
+    // Function to generate variant input fields based on selected attributes
+    function generateVariantInputFields() {
+
+        const attributeRows = document.querySelectorAll('.attrbute-row');
+
+        let formCount=0
+
+        attributeRows.forEach((row) => {
+
+          formCount++
+     
+          const optionName = row.querySelector('input[name="option-name[]"]').value;
+          const optionValues = row.querySelector('input[name="option-value[]"]').value;
+
+          const inputOptions = [];
+          const str = optionValues;
+
+          var str_array = str.split(',');
+
+          for(var i = 0; i < str_array.length; i++) {
+
+            str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+            inputOptions.push(str_array[i]);
+          }
+          
+          var variantInputs = document.getElementById("variant-table").getElementsByTagName('tbody')[0];
+          variantInputs.innerHTML = '';
+
+          for (const optionValue01 of inputOptions) {
+              if(formCount+1===2){
+                for (const optionValue02 of inputOptions) {
+                  
+                  const variantInput = document.createElement('tr');
+
+                  variantInput.innerHTML = `<td>${optionValue01}-${optionValue02}</td>
+                  <td><input class="form-control" type="file" id="image-${optionValue01}-${optionValue02}" name="image-${optionValue01}-${optionValue02}"></td>
+                  <td><input class="form-control" type="number" id="price-${optionValue01}-${optionValue02}" name="price-${optionValue01}-${optionValue02}"></td>
+                  <td><input class="form-control" type="number" id="stock-${optionValue01}-${optionValue02}" name="stock-${optionValue01}-${optionValue02}"></td>
+                  <td><input class="form-control" type="text" id="sku-${optionValue01}-${optionValue02}" name="sku-${optionValue01}-${optionValue02}"></td>`;
+
+                  variantInputs.appendChild(variantInput);
+
+                }
+              }
+              else {
+                const variantInput = document.createElement('tr');
+
+                variantInput.innerHTML = `<td>${option01}-${optionValue01}</td>
+                <td><input class="form-control" type="file" id="image-${option01}-${optionValue01}" name="image-${option01}-${optionValue01}"></td>
+                <td><input class="form-control" type="number" id="price-${option01}-${optionValue01}" name="price-${option01}-${optionValue01}"></td>
+                <td><input class="form-control" type="number" id="stock-${option01}-${optionValue01}" name="stock-${option01}-${optionValue01}"></td>
+                <td><input class="form-control" type="text" id="sku-${option01}-${optionValue01}" name="sku-${option01}-${optionValue01}"></td>`;
+
+                variantInputs.appendChild(variantInput);
+              }
+              
+          }
+
+        }); // end of forEach
+    }
+
+
+    function getInputValues() {
+
+      // ดึง element ทั้งหมดที่มี class="attrbute-row"
+      const attributeRows = document.querySelectorAll('.attrbute-row');
+
+      let i=0
+      // วนลูปผ่านแต่ละ element
+      attributeRows.forEach((row) => {
+        i++
+        // ดึง element ที่มี name="option-name[]" ภายใต้ element row และดึงค่า value ออกมา
+        const optionName = row.querySelector('input[name="option-name[]"]').value;
+
+        // ดึง element ที่มี name="option-value[]" ภายใต้ element row และดึงค่า value ออกมา
+        const optionValues = row.querySelector('input[name="option-value[]"]').value;
+
+        console.log(`Option name${i}: ${optionName}`);
+        console.log(`Option values${i}: ${optionValues}`);
+      });
+    }
+
+
+</script>
+  
+  
+
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test PrimoMall Product varaints</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="css/bootstrap-tagsinput.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-10 offset-md-1 mt-4">
+                <h2>Product variation</h2>
+                <form id="option-form">
+                    <div class="variation">
+                        <div class="attrbute-row p-4 mb-3 bg-light position-relative">
+                            <div class="position-absolute top-0 end-0">
+                                <button type="button" class="btn btn-remove-attrbute-row">x</button>
+                            </div>
+                            <div class="mb-3">
+                                <label for="option-name-1" class="form-label">Option name</label>
+                                <input type="text" class="form-control" name="option-name-1" id="option-name-1" placeholder="eg. Color, Size" value="" required>
+                            </div>
+                            <div class="mb-3">
+                              <label for="option-value-1" class="form-label">Option Value</label>
+                              <input type="text" class="form-control" name="option-value-1" id="option-value-1" value="" data-role="tagsinput" placeholder="Add option value" />
+                            </div>
+                            <!-- <div class="row">
+                                <label for="option_input_group" class="form-label">Options</label>
+                                <div class="option_input_group col-6">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control attribute-option-value" name="attribute-option" id="attribute-option" maxlength="20" value="" placeholder="eg. Red, Green">
+                                        <a class="btn-remove-option-input p-2 pe-auto"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="input-group mb-3">
+                                  <button type="button" class="btn-add-option-input btn btn btn-outline-primary">+ option</button>
+                              </div>
+                            </div> -->
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-outline-secondary btn-add-attribute-row">+ Add new</button>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="button" id="add-attribute" class="btn btn-success">Save Attribute</button>
+                    </div>
+
+                
+                    <!-- <label for="size">Size:</label>
+                    <input type="checkbox" id="size-s" name="size" value="s">
+                    <label for="size-s">S</label>
+                    <input type="checkbox" id="size-m" name="size" value="m">
+                    <label for="size-m">M</label>
+                    <input type="checkbox" id="size-l" name="size" value="l">
+                    <label for="size-l">L</label>
+                    <br>
+                    <label for="color">Color:</label>
+                    <input type="checkbox" id="color-red" name="color" value="red">
+                    <label for="color-red">Red</label>
+                    <input type="checkbox" id="color-green" name="color" value="green">
+                    <label for="color-green">Green</label> -->
+
+                </form>
+                
+
+                <div id="attribute-fields">
+                  <!-- Attribute fields will be added here dynamically -->
+                </div>
+                
+                <!-- Placeholder element for generated variant input fields -->
+                <div id="variant-inputs"></div>
+
+            </div>
+        </div>
+    </div>
+
+
+      <!-- HTML form to select attributes -->
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- The real deal -->
+    <script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://kit.fontawesome.com/88fbb0f99a.js" crossorigin="anonymous"></script>
+
+    <script src="js/bootstrap-tagsinput.min.js"></script>
+  
+  <!-- JavaScript code to generate variant input fields -->
+  <script>
+
+$(document).on('click', '.btn-add-option-input', function(){
+    var optionInputGroup = $(this).closest('.attrbute-row').find('.option_input_group').first();
+    var clonedOptionInputGroup = optionInputGroup.clone();
+    clonedOptionInputGroup.find('input.attribute-option-value').val('');
+    clonedOptionInputGroup.appendTo(optionInputGroup.parent());
+});
+
+$(document).ready(function() {
+
+  $( "#option-form" ).on( "submit", function( e ) {
+    
+      e.preventDefault();
+      var optionValue = $(this).find('input.attribute-option-value').val();
+      console.log(optionValue)
+  });
+
+
+  let attributeRowCount = 0;
+
+  $('.btn-add-attribute-row').click(function() {
+
+    if(attributeRowCount<1){
+      $('.variation').append(`<div class="attrbute-row p-4 mb-3 bg-light position-relative">
+                            <div class="position-absolute top-0 end-0">
+                                <button type="button" class="btn btn-remove-attrbute-row">x</button>
+                            </div>
+                            <div class="mb-3">
+                                <label for="attribute-name-${attributeRowCount+1}" class="form-label">Attribute ${attributeRowCount+1}</label>
+                                <input type="text" class="form-control" name="attribute-name-${attributeRowCount+1}" id="attribute-name-${attributeRowCount+1}" placeholder="Like Color, Size" value="" required>
+                            </div>
+                            <div class="row">
+                                <label for="option_input_group" class="form-label">Options</label>
+                                <div class="option_input_group col-6">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control attribute-option-value" name="attribute-${attributeRowCount+1}-option" id="attribute-${attributeRowCount+1}-option" maxlength="20" value="" placeholder="eg. Red, Green">
+                                        <a class="btn-remove-option-input p-2 pe-auto"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col-6">
+                              <div class="input-group mb-3">
+                                  <button type="button" class="btn-add-option-input btn btn btn-outline-primary">+ option</button>
+                              </div>
+                          </div>
+                        </div>`)
+      attributeRowCount++;
+    }
+    else if (attributeRowCount>=1) {
+      $('.btn-add-attribute-row').attr('disabled', true);
+    }
+
+    $('.btn-remove-attrbute-row').click(function() {
+      $(this).closest('.attrbute-row').remove();
+      attributeRowCount--;
+      $('.btn-add-attribute-row').attr('disabled', false);
+    });
+
+    //console.log(attributeRowCount);
+  });
+
+  // Initialize counter for attribute fields
+  var attributeFieldCounter = 0;
+
+  // Add attribute button click event
+  $('#add-attribute').click(function() {
+
+
+    // $("input[name=attribute]").each(function () {
+  
+    //       // Print the value currently in
+    //       // the input box
+    //       console.log(this.value);
+
+    //       $("input[name=option]").each(function () {
+          
+    // });
+    // Get attribute name and option from input fields
+    var attributeName = $('#attribute-name').val();
+    var attributeOption = $('#attribute-option').val();
+
+    // Create attribute field group
+    var attributeFieldGroup = $('<div>', {class: 'attribute-field-group'});
+
+    var varaintHeading = $('<h3>', {text: attributeName+'-'+attributeOption});
+
+    // Create label and input field for price
+    var priceLabel = $('<label>', {for: 'attribute-' + attributeFieldCounter + '-price', text: 'Price:'});
+    var priceInput = $('<input>', {type: 'text', id: 'attribute-' + attributeFieldCounter + '-price'});
+
+    // Create label and input field for SKU
+    var skuLabel = $('<label>', {for: 'attribute-' + attributeFieldCounter + '-sku', text: 'SKU:'});
+    var skuInput = $('<input>', {type: 'text', id: 'attribute-' + attributeFieldCounter + '-sku'});
+
+    // Create label and input field for stock
+    var stockLabel = $('<label>', {for: 'attribute-' + attributeFieldCounter + '-stock', text: 'Stock:'});
+    var stockInput = $('<input>', {type: 'text', id: 'attribute-' + attributeFieldCounter + '-stock'});
+
+    // Create label and input field for image
+    var imageLabel = $('<label>', {for: 'attribute-' + attributeFieldCounter + '-image', text: 'Image:'});
+    var imageInput = $('<input>', {type: 'text', id: 'attribute-' + attributeFieldCounter + '-image'});
+
+    // Append attribute field group to attribute fields container
+    $('#attribute-fields').append(attributeFieldGroup);
+
+    attributeFieldGroup.append(varaintHeading);
+
+    // Append price label and input field to attribute field group
+    attributeFieldGroup.append(priceLabel, priceInput);
+
+    // Append SKU label and input field to attribute field group
+    attributeFieldGroup.append(skuLabel, skuInput);
+
+    // Append stock label and input field to attribute field group
+    attributeFieldGroup.append(stockLabel, stockInput);
+
+    // Append image label and input field to attribute field group
+    attributeFieldGroup.append(imageLabel, imageInput);
+
+    // Increment attribute field counter
+    attributeFieldCounter++;
+
+    // Clear input fields
+  });
+});
+
+$(document).on("click", ".btn-remove-option-input", function() {
+  var optionInputGroup = $(this).closest('.option_input_group');
+  if ($('.option_input_group').length > 1) {
+    optionInputGroup.remove();
+    isFirstKeyUp = true;
+  }
+});
+
+    // Get the attribute checkboxes
+    const sizeCheckboxes = document.querySelectorAll('input[name="size"]');
+    const colorCheckboxes = document.querySelectorAll('input[name="color"]');
+  
+    // Listen for changes in the attribute checkboxes
+    sizeCheckboxes.forEach(sizeCheckbox => {
+      sizeCheckbox.addEventListener('change', generateVariantInputFields);
+    });
+    colorCheckboxes.forEach(colorCheckbox => {
+      colorCheckbox.addEventListener('change', generateVariantInputFields);
+    });
+  
+    // Function to generate variant input fields based on selected attributes
+    function generateVariantInputFields() {
+      // Get the selected attribute values
+      const selectedSizes = [...sizeCheckboxes]
+        .filter(sizeCheckbox => sizeCheckbox.checked)
+        .map(sizeCheckbox => sizeCheckbox.value);
+      const selectedColors = [...colorCheckboxes]
+        .filter(colorCheckbox => colorCheckbox.checked)
+        .map(colorCheckbox => colorCheckbox.value);
+  
+      // Generate variant input fields for each combination of selected attributes
+      const variantInputs = document.getElementById('variant-inputs');
+      variantInputs.innerHTML = '';
+      for (const size of selectedSizes) {
+        for (const color of selectedColors) {
+          const variantInput = document.createElement('div');
+          variantInput.innerHTML = `
+            <h3>${size.toUpperCase()}-${color.toUpperCase()}</h3>
+            <label for="price-${size}-${color}">Price:</label>
+            <input type="text" id="price-${size}-${color}" name="price-${size}-${color}">
+            <label for="sku-${size}-${color}">SKU:</label>
+            <input type="text" id="sku-${size}-${color}" name="sku-${size}-${color}">
+            <label for="stock-${size}-${color}">Stock:</label>
+            <input type="text" id="stock-${size}-${color}" name="stock-${size}-${color}">
+            <label for="image-${size}-${color}">Image:</label>
+            <input type="file" id="image-${size}-${color}" name="image-${size}-${color}">
+          `;
+          variantInputs.appendChild(variantInput);
+        }
+      }
+    }
+  </script>
+  
+  
+
+
+</body>
+</html>
